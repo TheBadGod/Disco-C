@@ -14,3 +14,10 @@ void disco_destroy_entity_metadata(struct discord_entity_metadata *entity) {
         return;
     free(entity);
 }
+
+cJSON *disco_serialize_entity_metadata(struct discord_entity_metadata *entity) {
+    cJSON *object = cJSON_CreateObject();
+    if(entity && entity->location)
+        cJSON_AddItemToObject(object, "location", cJSON_CreateString(entity->location));
+    return object;
+}

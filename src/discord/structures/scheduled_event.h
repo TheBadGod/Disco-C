@@ -39,6 +39,18 @@ void *disco_create_scheduled_event_struct_from_json(cJSON *data);
 void disco_destroy_scheduled_event(struct discord_scheduled_event *event);
 
 struct discord_scheduled_event **disco_get_scheduled_events_for_guild(char *guild_id, int *size);
-void free_scheduled_event_array(struct discord_scheduled_event **array, int size);
+void disco_free_scheduled_event_array(struct discord_scheduled_event **array, int size);
+
+void disco_guild_create_scheduled_event(
+        char *guild_id,
+        char *channel_id , // optional for EXTERNAL
+        struct discord_entity_metadata *metadata,
+        char *name,
+        enum Discord_Scheduled_Event_Privacy_Level privacy,
+        char *scheduled_start_time,
+        char *scheduled_end_time,
+        char *description,
+        enum Discord_Scheduled_Event_Entity_Type entity_type,
+        char *image);
 
 #endif

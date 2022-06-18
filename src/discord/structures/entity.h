@@ -18,4 +18,6 @@ struct discord_entity_metadata {
 void *disco_create_entity_metdata_from_json(cJSON *data);
 void disco_destroy_entity_metadata(struct discord_entity_metadata *entity);
 
+cJSON *disco_serialize_entity_metadata(struct discord_entity_metadata *entity);
+
 #endif

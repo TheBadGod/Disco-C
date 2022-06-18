@@ -85,19 +85,96 @@ struct discord_scheduled_event **disco_get_scheduled_events_for_guild(char *guil
             cJSON_ArrayForEach(cur, res_json) {
                 array[i] = disco_create_scheduled_event_struct_from_json(cur);
             }
+            cJSON_Delete(res_json);
 
             return array;
         }
+    } else {
+        d_log_err("Unable to fetch the scheduled events, Error code: %d\n", res);
+
+        return NULL;
     }
 
     return NULL;
 }
 
-void free_scheduled_event_array(struct discord_scheduled_event **array, int size) {
+void disco_free_scheduled_event_array(struct discord_scheduled_event **array, int size) {
     if(!array || size <= 0)
         return;
     for(int i = 0; i < size; i++) {
         disco_destroy_scheduled_event(array[i]);
     }
     free(array);
+}
+
+void disco_guild_create_scheduled_event(
+        char *guild_id,
+        char *channel_id , // optional for EXTERNAL
+        struct discord_entity_metadata *metadata,
+        char *name,
+        enum Discord_Scheduled_Event_Privacy_Level privacy,
+        char *scheduled_start_time,
+        char *scheduled_end_time,
+        char *description,
+        enum Discord_Scheduled_Event_Entity_Type entity_type,
+        char *image) {
+    char endpoint[256];
+    snprintf(endpoint, 256, "/guilds/%s/scheduled-events", guild_id);
+
+    char *response;
+    cJSON *json = cJSON_CreateObject();
+    if(channel_id)
+        cJSON_AddItemToObject(json, "channel_id", cJSON_CreateString(channel_id));
+    else if(entity_type != EXTERNAL) {
+        d_log_err("Channel id is only optional if external is true\n");
+        goto err;
+    }
+
+    if(metadata)
+        cJSON_AddItemToObject(json, "entity_metadata", disco_serialize_entity_metadata(metadata));
+    else if(entity_type == EXTERNAL) {// only optional if external is false
+        d_log_err("Metadata is always required if external is true\n");
+        goto err;
+    }
+
+    if(name)
+        cJSON_AddItemToObject(json, "name", cJSON_CreateString(name));
+    else {
+        d_log_err("Event name is always required\n");
+        goto err;
+    }
+
+    cJSON_AddItemToObject(json, "privacy_level", cJSON_CreateNumber(privacy));
+
+    if(scheduled_start_time)
+        cJSON_AddItemToObject(json, "scheduled_start_time", cJSON_CreateString(scheduled_start_time));
+    else {
+        d_log_err("Start time is always required\n");
+        goto err;
+    }
+
+    if(scheduled_end_time)
+        cJSON_AddItemToObject(json, "scheduled_end_time", cJSON_CreateString(scheduled_end_time));
+    else if(entity_type == EXTERNAL) {
+        d_log_err("End time is always required if external is true\n");
+        goto err;
+    }
+
+    if(description)
+        cJSON_AddItemToObject(json, "description", cJSON_CreateString(description));
+
+    cJSON_AddItemToObject(json, "entity_type", cJSON_CreateNumber(entity_type));
+
+    if(image)
+        cJSON_AddItemToObject(json, "image", cJSON_CreateString(image));
+
+    CURLcode res = request(endpoint, &response, json, REQUEST_POST);
+    if(res == CURLE_OK) {
+        d_log_normal("Got response %s\n", response);
+    } else {
+        d_log_err("Unable to post a scheduled event, Error code: %d\n", res);
+    }
+
+err:
+    cJSON_Delete(json);
 }
