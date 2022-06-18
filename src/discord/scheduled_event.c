@@ -74,7 +74,6 @@ struct discord_scheduled_event **disco_get_scheduled_events_for_guild(char *guil
     if(res == CURLE_OK) {
         cJSON *res_json = cJSON_Parse(response);
 
-        printf("Got response: %s\n", response);
         if(res_json) {
             *size = cJSON_GetArraySize(res_json);
 
@@ -92,4 +91,13 @@ struct discord_scheduled_event **disco_get_scheduled_events_for_guild(char *guil
     }
 
     return NULL;
+}
+
+void free_scheduled_event_array(struct discord_scheduled_event **array, int size) {
+    if(!array || size <= 0)
+        return;
+    for(int i = 0; i < size; i++) {
+        disco_destroy_scheduled_event(array[i]);
+    }
+    free(array);
 }

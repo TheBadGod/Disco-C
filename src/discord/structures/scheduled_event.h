@@ -39,5 +39,6 @@ void *disco_create_scheduled_event_struct_from_json(cJSON *data);
 void disco_destroy_scheduled_event(struct discord_scheduled_event *event);
 
 struct discord_scheduled_event **disco_get_scheduled_events_for_guild(char *guild_id, int *size);
+void free_scheduled_event_array(struct discord_scheduled_event **array, int size);
 
 #endif
