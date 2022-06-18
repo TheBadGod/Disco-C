@@ -83,7 +83,7 @@ struct discord_scheduled_event **disco_get_scheduled_events_for_guild(char *guil
             int i = 0;
             cJSON *cur = NULL;
             cJSON_ArrayForEach(cur, res_json) {
-                array[i] = disco_create_scheduled_event_struct_from_json(cur);
+                array[i++] = disco_create_scheduled_event_struct_from_json(cur);
             }
             cJSON_Delete(res_json);
 
