@@ -1,7 +1,6 @@
 #include "structures/message.h"
 #include "structures/structure.h"
 #include "../web/request.h"
-#include <curl/curl.h>
 
 static void embed_add_footer(cJSON *embed, struct discord_embed_footer *footer) {
     cJSON *footer_obj = cJSON_CreateObject();

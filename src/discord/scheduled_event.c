@@ -1,6 +1,6 @@
 #include "structures/scheduled_event.h"
 #include "structures/structure.h"
-
+#include "../web/request.h"
 
 void *disco_create_scheduled_event_struct_from_json(cJSON *data) {
     ALLOC_STRUCT(discord_scheduled_event, event);
@@ -14,9 +14,9 @@ void *disco_create_scheduled_event_struct_from_json(cJSON *data) {
     event->description = get_string_from_json(data, "description");
     event->scheduled_start_time = get_string_from_json(data, "scheduled_start_time");
     event->scheduled_end_time = get_string_from_json(data, "scheduled_end_time");
-    event->privacy_level = (enum Discord_Scheduled_Event_Privacy_Level) get_int_from_json(data, "privacy_level", GUILD_ONLY);
-    event->status = (enum Discord_Scheduled_Event_Status) get_int_from_json(data, "status", SCHEDULED);
-    event->entity_type = (enum Discord_Scheduled_Event_Entity_Type) get_int_from_json(data, "entity_type", STATUS_UNKNOWN);
+    event->privacy_level = get_int_from_json(data, "privacy_level", GUILD_ONLY);
+    event->status = get_int_from_json(data, "status", SCHEDULED);
+    event->entity_type = get_int_from_json(data, "entity_type", STATUS_UNKNOWN);
     event->entity_id = get_string_from_json(data, "entity_id");
 
     tmp = cJSON_GetObjectItem(data, "entity_metadata");
@@ -62,4 +62,34 @@ void disco_destroy_scheduled_event(struct discord_scheduled_event *event) {
         free(event->image);
     
     free(event);
+}
+
+struct discord_scheduled_event **disco_get_scheduled_events_for_guild(char *guild_id, int *size) {
+    char endpoint[256];
+    snprintf(endpoint, 256, "/guilds/%s/scheduled-events", guild_id);
+    *size = 0;
+
+    char *response;
+    CURLcode res = request(endpoint, &response, NULL, REQUEST_GET);
+    if(res == CURLE_OK) {
+        cJSON *res_json = cJSON_Parse(response);
+
+        printf("Got response: %s\n", response);
+        if(res_json) {
+            *size = cJSON_GetArraySize(res_json);
+
+            struct discord_scheduled_event **array = (struct discord_scheduled_event**) 
+                malloc(sizeof(void*) * (long unsigned int)(*size));
+            
+            int i = 0;
+            cJSON *cur = NULL;
+            cJSON_ArrayForEach(cur, res_json) {
+                array[i] = disco_create_scheduled_event_struct_from_json(cur);
+            }
+
+            return array;
+        }
+    }
+
+    return NULL;
 }
