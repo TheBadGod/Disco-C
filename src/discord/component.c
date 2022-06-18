@@ -1,6 +1,5 @@
 #include "structures/component.h"
-#include "disco.h"
-#include "structures/emoji.h"
+#include "structures/structure.h"
 
 void *disco_create_component_struct_json(cJSON *data) {
     struct discord_component *comp = (struct discord_component *)calloc(1, sizeof(struct discord_component));

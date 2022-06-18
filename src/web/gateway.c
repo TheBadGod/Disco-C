@@ -15,16 +15,21 @@ static int s = -1;
 static unsigned int HEARTBEAT_INTERVAL = 10000;
 static struct timeval last_hearbeat;
 
-static void gateway_handle_identify(websocket_client_t *client) {
+static void gateway_handle_identify(bot_client_t *client) {
     lwsl_user("TX: Sending gateway identify\n");
     char response[256];
-    sprintf(response, "{\"op\":2, \"d\":{\"token\":\"%s\",\"intents\":513, \"properties\":{\"$os\":\"linux\",\"$browser\":\"Disco-C\",\"$device\":\"Disco-C\"}}}", DISCORD_TOKEN);
-    websocket_send(client->wsi, response, strnlen(response, 256));
 
-    if (!client->heartbeat_active) {
+    // TODO make a correct cJSON object
+    snprintf(response, 256, 
+            "{\"op\":2, \"d\":{\"token\":\"%s\",\"intents\":%d, \"properties\":{\"$os\":\"linux\",\"$browser\":\"Disco-C\",\"$device\":\"Disco-C\"}}}", 
+            client->token, client->intents);
+
+    websocket_send(client->websocket_client->wsi, response, strnlen(response, 256));
+
+    if (!client->websocket_client->heartbeat_active) {
         d_log_notice("Creating heartbeat thread\n");
-        client->heartbeat_active = 1;
-        pthread_create(&client->heartbeat_thread, NULL, gateway_heartbeat_loop, (void *)client);
+        client->websocket_client->heartbeat_active = 1;
+        pthread_create(&client->websocket_client->heartbeat_thread, NULL, gateway_heartbeat_loop, (void *)client->websocket_client);
     }
 }
 
@@ -86,7 +91,7 @@ void gateway_on_receive(bot_client_t *bot, char *data, size_t len) {
 
         case DISCORD_HELLO:
             d_log_notice("Received HELLO: %s\n\n", data);
-            gateway_handle_identify(bot->websocket_client);
+            gateway_handle_identify(bot);
 
             // gets the heartbeat interval out of the data adjusts
             cJSON *d = cJSON_GetObjectItemCaseSensitive(result, "d");

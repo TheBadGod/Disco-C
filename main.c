@@ -1,14 +1,11 @@
 #include "example/example.h"
 #include "src/discord/disco.h"
-#include "src/discord/structures/message.h"
-#include "src/utils/disco_logging.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+
+#include "config.h"
 
 int main() {
     // Enable logging
-    d_set_log_level(D_LOG_ERR | D_LOG_NORMAL | D_LOG_NOTICE);
+    d_set_log_level(D_LOG_ERR | D_LOG_NORMAL | D_LOG_NOTICE | D_LOG_DEBUG);
 
     // init to 0. Without this some errors could show up
     disco_event_callbacks_t callbacks = {0};
@@ -18,7 +15,7 @@ int main() {
     callbacks.on_message_delete = &example_on_delete;
 
     // starts the bot. This function blocks
-    disco_start_bot(&callbacks);
+    disco_start_bot(&callbacks, DISCORD_TOKEN, INTENT_GUILDS | INTENT_GUILD_MESSAGES | INTENT_GUILD_SCHEDULED_EVENTS);
 
     return 0;
 }

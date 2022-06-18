@@ -1,5 +1,5 @@
 #include "structures/application.h"
-#include <stdlib.h>
+#include "structures/structure.h"
 
 // TODO implement creation of application struct (Low importance)
 void *disco_create_application_struct_json(cJSON *data) {

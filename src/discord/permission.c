@@ -1,4 +1,5 @@
 #include "structures/permission.h"
+#include "structures/structure.h"
 
 // TODO implement
 void *disco_create_overwrite_struct_json(cJSON *data) {

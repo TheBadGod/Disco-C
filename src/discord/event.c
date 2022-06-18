@@ -4,7 +4,7 @@
 #include "../utils/t_pool.h"
 #include "../utils/timer.h"
 #include "../web/websocket.h"
-#include "structures/user.h"
+#include "structures/structure.h"
 
 void event_handle_ready(void *b) {
     bot_client_t *bot = (bot_client_t *)b;
@@ -123,7 +123,9 @@ void event_handle(bot_client_t *bot, cJSON *data, char *event) {
     } else if (strncmp(event, "THREAD_MEMBERS_UPDATE", 22) == 0) {
 
     } else if (strncmp(event, "GUILD_CREATE", 13) == 0) {
-
+        char *guild_name = get_string_from_json(data, "name");
+        d_log_debug("Got a guild create event for guild %s\n", guild_name);
+        free(guild_name);
     } else if (strncmp(event, "GUILD_UPDATE", 13) == 0) {
 
     } else if (strncmp(event, "GUILD_DELETE", 13) == 0) {
@@ -153,11 +155,17 @@ void event_handle(bot_client_t *bot, cJSON *data, char *event) {
     } else if (strncmp(event, "GUILD_ROLE_DELETE", 18) == 0) {
 
     } else if (strncmp(event, "GUILD_SCHEDULED_EVENT_CREATE", 29) == 0) {
-
+        struct discord_scheduled_event *sched_event = disco_create_scheduled_event_struct_from_json(data);
+        d_log_normal("Created Event: %s\n", sched_event->name);
+        disco_destroy_scheduled_event(sched_event);
     } else if (strncmp(event, "GUILD_SCHEDULED_EVENT_UPDATE", 29) == 0) {
-
+        struct discord_scheduled_event *sched_event = disco_create_scheduled_event_struct_from_json(data);
+        d_log_normal("Updated Event: %s\n", sched_event->name);
+        disco_destroy_scheduled_event(sched_event);
     } else if (strncmp(event, "GUILD_SCHEDULED_EVENT_DELETE", 29) == 0) {
-
+        struct discord_scheduled_event *sched_event = disco_create_scheduled_event_struct_from_json(data);
+        d_log_normal("Deleted Event: %s\n", sched_event->name);
+        disco_destroy_scheduled_event(sched_event);
     } else if (strncmp(event, "GUILD_SCHEDULED_EVENT_USER_ADD", 31) == 0) {
 
     } else if (strncmp(event, "GUILD_SCHEDULED_EVENT_USER_REMOVE", 34) == 0) {

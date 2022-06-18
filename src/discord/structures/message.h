@@ -1,7 +1,6 @@
 #ifndef DISCO_MESSAGE
 #define DISCO_MESSAGE
 
-#include "../disco.h"
 #include "attachment.h"
 #include "channel.h"
 #include "component.h"

@@ -1,4 +1,5 @@
 #include "structures/message_activity.h"
+#include "structures/structure.h"
 
 // TODO implement
 void *disco_create_message_activity_struct_json(cJSON *data) {

@@ -1,8 +1,7 @@
 #include "structures/message.h"
-#include "../utils/disco_logging.h"
+#include "structures/structure.h"
 #include "../web/request.h"
 #include <curl/curl.h>
-#include <string.h>
 
 static void embed_add_footer(cJSON *embed, struct discord_embed_footer *footer) {
     cJSON *footer_obj = cJSON_CreateObject();
@@ -245,7 +244,7 @@ void disco_channel_edit_message(bot_client_t *bot, char *content, char *channel_
 }
 
 void *disco_create_message_struct_json(cJSON *data) {
-    struct discord_message *msg = (struct discord_message *)calloc(1, sizeof(struct discord_message));
+    ALLOC_STRUCT(discord_message, msg);
     cJSON *tmp_json = NULL;
 
     msg->id = get_string_from_json(data, "id");

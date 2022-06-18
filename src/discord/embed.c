@@ -1,8 +1,8 @@
 #include "structures/embed.h"
-#include "disco.h"
+#include "structures/structure.h"
 
 void *disco_create_embed_struct_json(cJSON *data) {
-    struct discord_embed *embed = (struct discord_embed *)calloc(1, sizeof(struct discord_embed));
+    ALLOC_STRUCT(discord_embed, embed);
     cJSON *tmp = NULL;
 
     embed->title = get_string_from_json(data, "title");
@@ -65,7 +65,7 @@ void disco_destroy_embed(struct discord_embed *embed) {
 }
 
 void *disco_create_embed_footer_struct_json(cJSON *data) {
-    struct discord_embed_footer *footer = (struct discord_embed_footer *)calloc(1, sizeof(struct discord_embed_footer));
+    ALLOC_STRUCT(discord_embed_footer, footer);
     footer->text = get_string_from_json(data, "text");
     footer->icon_url = get_string_from_json(data, "icon_url");
     footer->proxy_icon_url = get_string_from_json(data, "proxy_icon_url");
@@ -82,7 +82,7 @@ void disco_destroy_embed_footer(struct discord_embed_footer *footer) {
 }
 
 void *disco_create_embed_media_struct_json(cJSON *data) {
-    struct discord_embed_media *media = (struct discord_embed_media *)calloc(1, sizeof(struct discord_embed_media));
+    ALLOC_STRUCT(discord_embed_media, media);
     media->url = get_string_from_json(data, "url");
     media->proxy_url = get_string_from_json(data, "url");
     media->height = get_int_from_json(data, "height", -1);
@@ -98,7 +98,7 @@ void disco_destroy_embed_media(struct discord_embed_media *media) {
 }
 
 void *disco_create_embed_provider_struct_json(cJSON *data) {
-    struct discord_embed_provider *prov = (struct discord_embed_provider *)calloc(1, sizeof(struct discord_embed_provider));
+    ALLOC_STRUCT(discord_embed_provider, prov);
     prov->name = get_string_from_json(data, "name");
     prov->url = get_string_from_json(data, "url");
     return prov;
@@ -112,7 +112,7 @@ void disco_destroy_embed_provider(struct discord_embed_provider *provider) {
 }
 
 void *disco_create_embed_author_struct_json(cJSON *data) {
-    struct discord_embed_author *author = (struct discord_embed_author *)calloc(1, sizeof(struct discord_embed_author));
+    ALLOC_STRUCT(discord_embed_author, author);
     author->name = get_string_from_json(data, "name");
     author->url = get_string_from_json(data, "url");
     author->icon_url = get_string_from_json(data, "icon_url");
@@ -132,7 +132,7 @@ void disco_destroy_embed_author(struct discord_embed_author *author) {
 }
 
 void *disco_create_embed_field_struct_json(cJSON *data) {
-    struct discord_embed_field *field = (struct discord_embed_field *)calloc(1, sizeof(struct discord_embed_field));
+    ALLOC_STRUCT(discord_embed_field, field);
     field->name = get_string_from_json(data, "name");
     field->value = get_string_from_json(data, "value");
     field->_inline = get_bool_from_json(data, "inline", 0);

@@ -1,7 +1,5 @@
-#include "./structures/channel.h"
-#include "./structures/message.h"
-#include "./structures/thread.h"
-#include "disco.h"
+#include "structures/channel.h"
+#include "structures/structure.h"
 
 void *disco_create_channel_struct_json(cJSON *data) {
     struct discord_channel *ch = (struct discord_channel *)calloc(1, sizeof(struct discord_channel));

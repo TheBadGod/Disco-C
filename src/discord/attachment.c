@@ -1,5 +1,5 @@
 #include "structures/attachment.h"
-#include "disco.h"
+#include "structures/structure.h"
 
 void *disco_create_attachment_struct_json(cJSON *data) {
     struct discord_attachment *attach = (struct discord_attachment *)calloc(1, sizeof(struct discord_attachment));

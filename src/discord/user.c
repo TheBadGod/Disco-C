@@ -1,12 +1,8 @@
 #include "structures/user.h"
-#include "disco.h"
-#include <cJSON/cJSON.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "structures/structure.h"
 
 void *disco_create_user_struct_json(cJSON *data) {
-    struct discord_user *user = (struct discord_user *)calloc(1, sizeof(struct discord_user));
+    ALLOC_STRUCT(discord_user, user);
     user->id = get_string_from_json(data, "id");
     user->username = get_string_from_json(data, "username");
     user->discriminator = get_string_from_json(data, "discriminator");

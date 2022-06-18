@@ -1,4 +1,5 @@
 #include "structures/reaction.h"
+#include "structures/structure.h"
 
 // TODO implement
 void *disco_create_reaction_struct_json(cJSON *data) {

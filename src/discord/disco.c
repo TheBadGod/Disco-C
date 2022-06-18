@@ -7,7 +7,7 @@
 #include <curl/curl.h>
 #include <string.h>
 
-void disco_start_bot(disco_event_callbacks_t *callbacks) {
+void disco_start_bot(disco_event_callbacks_t *callbacks, char *token, int intents) {
     // LOG LEVEL
     int logs = LLL_USER | LLL_ERR | LLL_WARN;
     lws_set_log_level(logs, NULL);
@@ -20,6 +20,9 @@ void disco_start_bot(disco_event_callbacks_t *callbacks) {
     bot.websocket_client = &client;
     bot.callbacks = callbacks;
     bot.thread_pool = t_pool_init(t_process_count());
+
+    bot.token = token;
+    bot.intents = intents;
 
     // inits the cache
     if (0 != disco_cache_init(1000)) {

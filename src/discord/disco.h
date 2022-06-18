@@ -3,21 +3,8 @@
 
 #include "../utils/t_pool.h"
 #include "../web/websocket.h"
-#include "structures/application.h"
-#include "structures/attachment.h"
-#include "structures/channel.h"
-#include "structures/component.h"
-#include "structures/guild.h"
-#include "structures/message.h"
-#include "structures/message_activity.h"
-#include "structures/permission.h"
-#include "structures/reaction.h"
-#include "structures/role.h"
-#include "structures/sticker.h"
-#include "structures/thread.h"
-#include "structures/user.h"
-#include <cJSON/cJSON.h>
-#include <stdbool.h>
+#include "structures/structure.h"
+#include "intents.h"
 
 typedef struct websocket_client websocket_client_t;
 typedef struct bot_client bot_client_t;
@@ -43,9 +30,12 @@ typedef struct disco_event_callbacks {
 typedef struct bot_client {
     websocket_client_t *websocket_client;
     disco_event_callbacks_t *callbacks;
-    struct discord_user *user;
     t_pool_t *thread_pool;
     long heartbeat_latency;
+    
+    char *token;
+    int intents;
+    struct discord_user *user;
 } bot_client_t;
 
 /**
@@ -53,8 +43,12 @@ typedef struct bot_client {
  *
  * @param callbacks A callbacks object containing the callbacks to
  * the event functions.
+ * @param token The Discord bot token which is only visible once you
+ * create the bot account (Or when you reset the token)
+ * @param intents The intents for the bot (As in which capabilities
+ * your bot should have)
  */
-void disco_start_bot(disco_event_callbacks_t *callbacks);
+void disco_start_bot(disco_event_callbacks_t *callbacks, char *token, int intents);
 
 /**
  * @brief Frees up memory for a bot instance.

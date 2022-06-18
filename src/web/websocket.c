@@ -137,8 +137,9 @@ int websocket_connect(bot_client_t *bot_client) {
 
 void websocket_destroy_client(websocket_client_t *client) {
     // closes the connection if there is one
-    if (client->connected)
-        lws_set_timeout(client->wsi, LWS_CLOSE_STATUS_NORMAL, LWS_TO_KILL_ASYNC);
+
+    // Mark the client as disconnected
+    client->connected = false;
     lws_context_destroy(client->context);
     client->active = 0;
     client->heartbeat_active = 0;
@@ -170,7 +171,6 @@ void websocket_close(bot_client_t *bot_client) {
         client->heartbeat_active = 0;
         pthread_join(client->heartbeat_thread, NULL);
     }
-    lws_set_timeout(client->wsi, LWS_CLOSE_STATUS_NORMAL, LWS_TO_KILL_ASYNC);
     lws_cancel_service(client->context);
 }
 

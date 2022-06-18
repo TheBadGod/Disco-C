@@ -14,7 +14,6 @@ struct discord_thread_metadata {
     char *create_timestamp;
 };
 
-// TODO implement
 void *disco_create_thread_metadata_struct_json(cJSON *data);
 void disco_destroy_thread_metadata(struct discord_thread_metadata *thread);
 
@@ -26,7 +25,6 @@ struct discord_thread_member {
     int flags;
 };
 
-// TODO implement
 void *disco_create_thread_member_struct_json(cJSON *data);
 void disco_destroy_thread_member(struct discord_thread_member *member);
 

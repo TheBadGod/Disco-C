@@ -2,7 +2,7 @@ all: main
 
 LIBS 	= -lcurl -lpthread -lwebsockets
 CC 		= gcc
-CFLAGS	= -Wall -Wextra -Wconversion -Wpedantic -std=gnu11 -g
+CFLAGS	= -Wall -Wextra -Wconversion -Wpedantic -Werror -std=gnu11 -g
 BUILD	= build
 TEST = tests
 INCLUDE = -Ilib

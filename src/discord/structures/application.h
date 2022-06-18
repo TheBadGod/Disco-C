@@ -2,8 +2,7 @@
 #define DISCO_APPLICATION
 
 #include "user.h"
-#include <cJSON/cJSON.h>
-#include <stdbool.h>
+#include "structure.h"
 
 // https://discord.com/developers/docs/topics/teams#data-models-team-member-object
 struct discord_team_member {
