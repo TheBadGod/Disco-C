@@ -78,6 +78,6 @@ bool get_bool_from_json(cJSON *data, const char *name, int default_);
 int get_int_from_json(cJSON *data, const char *name, int default_);
 
 typedef void *(*disco_struct_fn)(cJSON *);
-int get_array_from_json(cJSON *data, const char *name, void ***array, size_t s, disco_struct_fn func);
+int get_array_from_json(cJSON *data, const char *name, void ***array, disco_struct_fn func);
 
 #endif

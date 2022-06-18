@@ -294,13 +294,13 @@ void *disco_create_message_struct_json(cJSON *data) {
     }
 
     // mention channels
-    msg->mention_channels_count = get_array_from_json(data, "mention_channels", (void ***)&msg->mention_channels, sizeof(struct discord_channel_mention), &disco_create_channel_mention_struct_json);
+    msg->mention_channels_count = get_array_from_json(data, "mention_channels", (void ***)&msg->mention_channels, &disco_create_channel_mention_struct_json);
 
     // attachments
-    msg->attachments_count = get_array_from_json(data, "attachments", (void ***)&msg->attachments, sizeof(struct discord_attachment), &disco_create_attachment_struct_json);
+    msg->attachments_count = get_array_from_json(data, "attachments", (void ***)&msg->attachments, &disco_create_attachment_struct_json);
 
     // reactions
-    msg->reactions_count = get_array_from_json(data, "reactions", (void ***)&msg->reactions, sizeof(struct discord_reaction), &disco_create_reaction_struct_json);
+    msg->reactions_count = get_array_from_json(data, "reactions", (void ***)&msg->reactions, &disco_create_reaction_struct_json);
 
     msg->nonce = get_string_from_json(data, "nonce");
     msg->pinned = get_bool_from_json(data, "pinned", 0);
@@ -335,13 +335,13 @@ void *disco_create_message_struct_json(cJSON *data) {
         msg->interaction = (struct discord_interaction *)disco_create_interaction_struct_json(tmp_json);
 
     // components
-    msg->components_count = get_array_from_json(data, "components", (void ***)&msg->components, sizeof(struct discord_component), &disco_create_component_struct_json);
+    msg->components_count = get_array_from_json(data, "components", (void ***)&msg->components, &disco_create_component_struct_json);
 
     // sticker_items
-    msg->sticker_items_count = get_array_from_json(data, "sticker_items", (void ***)&msg->sticker_items, sizeof(struct discord_message_sticker_item), &disco_create_message_sticker_item_struct_json);
+    msg->sticker_items_count = get_array_from_json(data, "sticker_items", (void ***)&msg->sticker_items, &disco_create_message_sticker_item_struct_json);
 
     // stickers
-    msg->stickers_count = get_array_from_json(data, "stickers", (void ***)&msg->stickers, sizeof(struct discord_sticker), &disco_create_sticker_struct_json);
+    msg->stickers_count = get_array_from_json(data, "stickers", (void ***)&msg->stickers, &disco_create_sticker_struct_json);
 
     return msg;
 }

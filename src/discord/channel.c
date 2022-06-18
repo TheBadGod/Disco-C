@@ -8,7 +8,7 @@ void *disco_create_channel_struct_json(cJSON *data) {
     ch->type = (enum Discord_Channel_Type)get_int_from_json(data, "type", 0);
     ch->guild_id = get_string_from_json(data, "guild_id");
     ch->position = get_int_from_json(data, "position", -1);
-    ch->permission_overwrites_count = get_array_from_json(data, "permission_overwrites", (void ***)&ch->permission_overwrites, sizeof(struct discord_overwrite), &disco_create_overwrite_struct_json);
+    ch->permission_overwrites_count = get_array_from_json(data, "permission_overwrites", (void ***)&ch->permission_overwrites, &disco_create_overwrite_struct_json);
     ch->name = get_string_from_json(data, "name");
     ch->topic = get_string_from_json(data, "topic");
     ch->nsfw = get_bool_from_json(data, "nsfw", 0);
@@ -16,7 +16,7 @@ void *disco_create_channel_struct_json(cJSON *data) {
     ch->bitrate = get_int_from_json(data, "bitrate", 0);
     ch->user_limit = get_int_from_json(data, "user_limit", 0);
     ch->rate_limit_per_user = get_int_from_json(data, "rate_limit_per_user", 0);
-    ch->recipients_count = get_array_from_json(data, "recipients", (void ***)&ch->recipients, sizeof(struct discord_user), &disco_create_user_struct_json);
+    ch->recipients_count = get_array_from_json(data, "recipients", (void ***)&ch->recipients, &disco_create_user_struct_json);
     ch->icon = get_string_from_json(data, "icon");
     ch->owner_id = get_string_from_json(data, "owner_id");
     ch->application_id = get_string_from_json(data, "application_id");

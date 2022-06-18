@@ -72,13 +72,13 @@ int get_int_from_json(cJSON *data, const char *name, int default_) {
     return field->valueint;
 }
 
-int get_array_from_json(cJSON *data, const char *name, void ***array, size_t s, disco_struct_fn func) {
+int get_array_from_json(cJSON *data, const char *name, void ***array, disco_struct_fn func) {
     cJSON *tmp = cJSON_GetObjectItem(data, name);
     int size = cJSON_GetArraySize(tmp);
     if (size <= 0)
         return 0;
     cJSON *cur = NULL;
-    *array = (void **)malloc((size_t)size * s);
+    *array = (void **)malloc((size_t)size * sizeof(void*));
     int i = 0;
     cJSON_ArrayForEach(cur, tmp) {
         (*array)[i++] = func(cur);

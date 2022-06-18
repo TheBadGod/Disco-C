@@ -12,7 +12,6 @@ void *disco_create_component_struct_json(cJSON *data) {
             data,
             "components",
             (void ***)&comp->comp.action_row->components,
-            sizeof(struct discord_component),
             &disco_create_component_struct_json);
         break;
     case COMPONENT_BUTTON:
@@ -33,7 +32,6 @@ void *disco_create_component_struct_json(cJSON *data) {
             data,
             "options",
             (void ***)&comp->comp.select_menu->options,
-            sizeof(struct discord_select_option),
             &disco_create_select_option_struct);
         comp->comp.select_menu->placeholder = get_string_from_json(data, "placeholder");
         comp->comp.select_menu->min_values = get_int_from_json(data, "min_values", 1);

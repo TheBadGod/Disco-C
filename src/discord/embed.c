@@ -31,7 +31,7 @@ void *disco_create_embed_struct_json(cJSON *data) {
     tmp = cJSON_GetObjectItem(data, "author");
     if (tmp)
         embed->author = (struct discord_embed_author *)disco_create_embed_author_struct_json(tmp);
-    embed->fields_count = get_array_from_json(data, "fields", (void ***)&embed->fields, sizeof(struct discord_embed_field), &disco_create_embed_field_struct_json);
+    embed->fields_count = get_array_from_json(data, "fields", (void ***)&embed->fields, &disco_create_embed_field_struct_json);
     return embed;
 }
 void disco_destroy_embed(struct discord_embed *embed) {
