@@ -117,7 +117,8 @@ void disco_guild_create_scheduled_event(
         char *scheduled_end_time,
         char *description,
         enum Discord_Scheduled_Event_Entity_Type entity_type,
-        char *image) {
+        char *image,
+        struct discord_scheduled_event **out_struct) {
     char endpoint[256];
     snprintf(endpoint, 256, "/guilds/%s/scheduled-events", guild_id);
 
@@ -170,7 +171,12 @@ void disco_guild_create_scheduled_event(
 
     CURLcode res = request(endpoint, &response, json, REQUEST_POST);
     if(res == CURLE_OK) {
-        d_log_normal("Got response %s\n", response);
+        if(out_struct) {
+            cJSON *res_json = cJSON_Parse(response);
+            *out_struct = (struct discord_scheduled_event*) 
+                disco_create_scheduled_event_struct_from_json(res_json);
+            cJSON_Delete(res_json);
+        }
     } else {
         d_log_err("Unable to post a scheduled event, Error code: %d\n", res);
     }

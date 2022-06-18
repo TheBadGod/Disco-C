@@ -51,6 +51,7 @@ void disco_guild_create_scheduled_event(
         char *scheduled_end_time,
         char *description,
         enum Discord_Scheduled_Event_Entity_Type entity_type,
-        char *image);
+        char *image,
+        struct discord_scheduled_event **out_struct);
 
 #endif

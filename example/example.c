@@ -15,7 +15,8 @@ void example_on_ready(bot_client_t *bot) {
 
     printf("There exist %d events for guild %s:\n", size, guild_id);
     for(int i = 0; i < size; i++) {
-        printf("  %s\n", events[i]->name);
+        if(events[i])
+            printf("  %s\n", events[i]->name);
     }
     disco_free_scheduled_event_array(events, size);
 
@@ -28,6 +29,8 @@ void example_on_ready(bot_client_t *bot) {
     strftime(start, 256, "%FT%TZ", gmtime(&now));
     now += 1000;
     strftime(end, 256, "%FT%TZ", gmtime(&now));
+
+    struct discord_scheduled_event *event;
 
     struct discord_entity_metadata metadata = {
         "This is the location"
@@ -42,8 +45,13 @@ void example_on_ready(bot_client_t *bot) {
             end,
             "Test event, created using Disco-C", // Description, optional
             EXTERNAL, // Since we don't have a channel id we need it to be external
-            NULL // No image
+            NULL, // No image
+            &event // Don't put the output into a struct
     );
+    
+    printf("Created event  : %s\n", event->name);
+
+    disco_destroy_scheduled_event(event);
 }
 
 void example_on_message(bot_client_t *bot, struct discord_message *message) {
