@@ -21,7 +21,7 @@ static void gateway_handle_identify(bot_client_t *client) {
 
     // TODO make a correct cJSON object
     snprintf(response, 256, 
-            "{\"op\":2, \"d\":{\"token\":\"%s\",\"intents\":%d, \"properties\":{\"$os\":\"linux\",\"$browser\":\"Disco-C\",\"$device\":\"Disco-C\"}}}", 
+            "{\"op\":2, \"d\":{\"token\":\"%s\",\"intents\":%d, \"properties\":{\"os\":\"linux\",\"browser\":\"Disco-C\",\"device\":\"Disco-C\"}}}", 
             client->token, client->intents);
 
     websocket_send(client->websocket_client->wsi, response, strnlen(response, 256));
