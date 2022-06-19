@@ -73,6 +73,7 @@ struct discord_scheduled_event **disco_get_scheduled_events_for_guild(char *guil
     CURLcode res = request(endpoint, &response, NULL, REQUEST_GET);
     if(res == CURLE_OK) {
         cJSON *res_json = cJSON_Parse(response);
+        free(response);
 
         if(res_json) {
             *size = cJSON_GetArraySize(res_json);
@@ -88,14 +89,16 @@ struct discord_scheduled_event **disco_get_scheduled_events_for_guild(char *guil
             cJSON_Delete(res_json);
 
             return array;
+        } else {
+            d_log_err("Unable to parse json, Response: %s\n", response);
+            free(response);
+            return NULL;
         }
     } else {
+        free(response);
         d_log_err("Unable to fetch the scheduled events, Error code: %d\n", res);
-
         return NULL;
     }
-
-    return NULL;
 }
 
 void disco_free_scheduled_event_array(struct discord_scheduled_event **array, int size) {
@@ -180,6 +183,8 @@ void disco_guild_create_scheduled_event(
     } else {
         d_log_err("Unable to post a scheduled event, Error code: %d\n", res);
     }
+
+    free(response);
 
 err:
     cJSON_Delete(json);
